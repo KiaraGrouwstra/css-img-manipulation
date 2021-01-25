@@ -1,7 +1,7 @@
 {
     "name": "css-img-manipulation",
     "description": "manipulate images by css",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "bin": {
       "css-img-manipulation": "src/index.js"
     },
