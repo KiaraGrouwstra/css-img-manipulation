@@ -15,6 +15,7 @@ program
   .option('-i, --img <path>', 'image path')
   .option('-o, --out <path>', 'image out path, default: override --img!')
   .option('-q, --quality <number>', 'quality, default 1.0')
+  .option('-r, --rotate', 'whether to rotate height/width')
 program.parse(process.argv);
 
 global.cls = program.cls || 'filter';
@@ -22,6 +23,7 @@ global.css = resolve(program.css || './style.css');
 global.img = resolve(program.img || './image.png');
 var out = resolve(program.out || global.img);
 var quality = program.quality || 0.9;
+var rotate = program.rotate;
 
 var options = {pretty:true, globals:['global']};
 var fn = pug.compileFile(`${__dirname}/filter.pug`, options);
@@ -33,7 +35,9 @@ fs.writeFileSync(htmlPath, fn(options));
 
 im.identify(global.img, function(err, features){
   if (err) throw err;
-  var {width, height} = features;
+  // var {width, height} = features;
+  var width  = rotate ? features.height : features.width;
+  var height = rotate ? features.width  : features.height;
 
   // source: https://jonathanmh.com/taking-full-page-screenshots-headless-chrome/
   const screenshotDelay = 2000; // ms
