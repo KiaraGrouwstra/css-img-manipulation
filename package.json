@@ -1,6 +1,7 @@
 {
     "name": "css-img-manipulation",
     "description": "manipulate images by css",
+    "version": "0.0.1",
     "dependencies": {
       "pug": "^3.0.0",
       "imagemagick": "^0.1.3",

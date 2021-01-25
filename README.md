@@ -3,7 +3,16 @@
 This is a small library I wrote to manipulate images using css.
 My use-case for this was processing images with instagram filters, which I had found [css versions](https://una.im/CSSgram/) of.
 
-usage:
+### dependencies
+- Google Chrome
+- ImageMagick
+
+### install
+```bash
+npm install -g css-img-manipulation
+```
+
+### usage
 ```bash
 cd src/
 # start headless chrome
