@@ -20,8 +20,6 @@ google-chrome --headless --hide-scrollbars --remote-debugging-port=9222 --disabl
 pid=$(echo $!)
 # manipulate an image using a css filter
 css-img-manipulation --css ./example/clarendon.css --cls clarendon --img ./example/cacti.jpg --out ./example/cacti-clarendon.jpg
-# optionally recompress to adress added bloat
-magick convert -quality 90% ./example/cacti-clarendon.jpg ./example/cacti-clarendon-compressed.jpg
 # kill headless chrome
 kill $pid
 ```

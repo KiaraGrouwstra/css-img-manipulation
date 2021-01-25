@@ -1,9 +1,12 @@
 #!/usr/bin/env node
 const pug = require('pug');
 const fs = require('fs');
+const path = require('path');
 const program = require('commander');
 const im = require('imagemagick');
 const CDP = require('chrome-remote-interface');
+const tmp = require('tmp');
+const resolve = path.resolve;
 
 program
   .usage('[options]')
@@ -11,16 +14,21 @@ program
   .option('-c, --cls <str>', 'class name, default filter')
   .option('-i, --img <path>', 'image path')
   .option('-o, --out <path>', 'image out path, default: override --img!')
+  .option('-q, --quality <number>', 'quality, default 1.0')
 program.parse(process.argv);
 
-global.css = program.css || './style.css';
 global.cls = program.cls || 'filter';
-global.img = program.img || './image.png';
-var out = program.out || global.img;
+global.css = resolve(program.css || './style.css');
+global.img = resolve(program.img || './image.png');
+var out = resolve(program.out || global.img);
+var quality = program.quality || 0.9;
 
 var options = {pretty:true, globals:['global']};
 var fn = pug.compileFile(`${__dirname}/filter.pug`, options);
-var htmlPath = `${__dirname}/filter.html`;
+const tmpFile = tmp.fileSync({ postfix: '.html' });
+// var htmlPath = `${__dirname}/filter.html`;
+var htmlPath = tmpFile.name;
+// console.debug(htmlPath);
 fs.writeFileSync(htmlPath, fn(options));
 
 im.identify(global.img, function(err, features){
@@ -73,6 +81,16 @@ im.identify(global.img, function(err, features){
           console.error(err);
         } else {
           // console.log('Screenshot saved');
+          // compress
+          im.crop({
+            srcPath: out,
+            dstPath: out,
+            width,
+            height,
+            quality,
+          }, function (err, stdout, stderr){
+            if (err) return console.error(err.stack || err);
+          });
         }
       });
         client.close();
